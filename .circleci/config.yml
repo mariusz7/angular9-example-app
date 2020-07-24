@@ -10,7 +10,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - browser-tools/install-browser-tools
+            - browser-tools/install-chrome
             - run: npm install
             - run: npm test
 workflows:
