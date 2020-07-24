@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
   browser-tools: circleci/browser-tools@1.0.1
+  aws-ecr: circleci/aws-ecr@6.11.0
 jobs:
   build-and-test:
     executor:
@@ -15,8 +16,23 @@ jobs:
             - run: npm run lint
             - run: npm run test
             - run: npm run build:prod
+            - setup_remote_docker
 
 workflows:
     build-and-test:
       jobs:
         - build-and-test
+        - aws-ecr/build-and-push-image:
+            account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+            aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+            aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+            context: myContext
+            create-repo: true
+            dockerfile: myDockerfile
+            no-output-timeout: 20m
+            path: pathToMyDockerfile
+            profile-name: myProfileName
+            region: AWS_REGION_ENV_VAR_NAME
+            repo: myECRRepository
+            skip-when-tags-exist: false
+            tag: 'latest,myECRRepoTag'
