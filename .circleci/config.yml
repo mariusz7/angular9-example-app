@@ -12,9 +12,9 @@ jobs:
           steps:
             - browser-tools/install-chrome
             - run: npm install
-            - run: npm test
-            - store_test_results:
-                path: test-results
+            - run: npm run lint
+            - run: npm run test
+            - run: npm run build:prod
 
 workflows:
     build-and-test:
