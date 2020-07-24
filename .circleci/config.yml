@@ -33,6 +33,6 @@ workflows:
             path: pathToMyDockerfile
             profile-name: myProfileName
             region: AWS_REGION_ENV_VAR_NAME
-            repo: myECRRepository
+            repo: angular9-example-app
             skip-when-tags-exist: false
             tag: 'latest,myECRRepoTag'
