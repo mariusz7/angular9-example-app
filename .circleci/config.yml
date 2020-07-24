@@ -3,6 +3,7 @@ orbs:
   node: circleci/node@1.1.6
   browser-tools: circleci/browser-tools@1.0.1
   aws-ecr: circleci/aws-ecr@6.11.0
+  aws-ecs: circleci/aws-ecs@1.2.0
 jobs:
   build-and-test:
     executor:
@@ -16,7 +17,6 @@ jobs:
             - run: npm run lint
             - run: npm run test
             - run: npm run build:prod
-            - setup_remote_docker
 
 workflows:
     build-and-test:
@@ -24,11 +24,7 @@ workflows:
         - build-and-test
         - aws-ecr/build-and-push-image:
             create-repo: true
-            dockerfile: Dockerfile
-            no-output-timeout: 5m
-            path: .
             repo: angular9-example-app
-            skip-when-tags-exist: false
             tag: 'latest,0.0.1'
             requires:
             - build-and-test
