@@ -23,8 +23,14 @@ workflows:
       jobs:
         - build-and-test
         - aws-ecr/build-and-push-image:
+            requires:
+              - build-and-test
             create-repo: true
             repo: angular9-example-app
             tag: 'latest,0.0.1'
+        - aws-ecs/deploy-service-update:
             requires:
-            - build-and-test
+              - aws-ecr/build-and-push-image
+            family: "${AWS_RESOURCE_NAME_PREFIX}-service"
+            cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+            container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=latest"
