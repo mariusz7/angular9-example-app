@@ -33,6 +33,9 @@ workflows:
       jobs:
         - build-and-test:
             name: "Build app. and run tests"
+            filters:
+              branches:
+                only: master
 
         - aws-ecr/build-and-push-image:
             name: "Dockerize app. and push to repository"
@@ -50,6 +53,9 @@ workflows:
             tag: "latest,${CIRCLE_SHA1}"
             requires:
             - "Build app. and run tests"
+            filters:
+              branches:
+                only: master
 
         - aws-ecs/deploy-service-update:
             name: "Deploy to DEV"
@@ -59,12 +65,19 @@ workflows:
             cluster-name: 'cobiro-dev-cluster'
             service-name: 'cobiro-dev-service'
             container-image-name-updates: "container=cobiro-dev-container,tag=${CIRCLE_SHA1}"
+            filters:
+              branches:
+                only: master
 
         - deploy-to-qa-approval:
             name: "Approval before deployment to QA"
             type: approval
             requires:
               - "Deploy to DEV"
+            filters:
+              branches:
+                only: master
+
         - aws-ecs/deploy-service-update:
             name: "Deploy to QA"
             requires:
@@ -73,12 +86,19 @@ workflows:
             cluster-name: 'cobiro-qa-cluster'
             service-name: 'cobiro-qa-service'
             container-image-name-updates: "container=cobiro-qa-container,tag=${CIRCLE_SHA1}"
+            filters:
+              branches:
+                only: master
 
         - deploy-to-prod-approval:
             name: "Approval before deployment to PROD"
             type: approval
             requires:
               - "Deploy to QA"
+            filters:
+              branches:
+                only: master
+
         - aws-ecs/deploy-service-update:
             name: "Deploy to PROD"
             requires:
@@ -87,3 +107,6 @@ workflows:
             cluster-name: 'cobiro-prod-cluster'
             service-name: 'cobiro-prod-service'
             container-image-name-updates: "container=cobiro-prod-container,tag=${CIRCLE_SHA1}"
+            filters:
+              branches:
+                only: master
