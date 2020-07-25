@@ -24,6 +24,10 @@ jobs:
     executor: aws-cli/default
     steps:
       - aws-cli/setup
+      - run: printenv
+      - run: aws --version
+      - run: cat ~/.aws/config
+      - run: cat ~/.aws/credentials
       - run: aws ecr describe-repositories
     
 
