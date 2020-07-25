@@ -25,6 +25,7 @@ workflows:
         - aws-ecr/build-and-push-image:
             requires:
               - build-and-test
+            account-url: AWS_ECR_ACCOUNT_URL
             create-repo: true
             repo: angular9-example-app
             tag: 'latest,0.0.1'
