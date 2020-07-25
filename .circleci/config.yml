@@ -29,7 +29,7 @@ jobs:
 
 
 workflows:
-    build-and-test:
+    "Cobiro regular pipeline":
       jobs:
         - build-and-test
         - aws-ecr/build-and-push-image:
