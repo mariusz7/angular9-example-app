@@ -80,7 +80,7 @@ workflows:
         - aws-ecs/deploy-service-update:
             name: "Deploy to PROD"
             requires:
-              - deploy-to-prod-approval
+              - "Approval before deployment to PROD"
             family: 'cobiro-prod-task-definition'
             cluster-name: 'cobiro-prod-cluster'
             service-name: 'cobiro-prod-service'
