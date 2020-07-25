@@ -5,6 +5,7 @@ orbs:
   node: circleci/node@1.1.6
   browser-tools: circleci/browser-tools@1.0.1
   aws-ecr: circleci/aws-ecr@6.11.0
+  aws-ecs: circleci/aws-ecs@1.2.0
 
 
 jobs:
@@ -46,3 +47,9 @@ workflows:
             tag: 'latest,0.0.1'
             requires:
             - build-and-test
+        - aws-ecs/deploy-service-update:
+            requires:
+              - aws-ecr/build-and-push-image
+            family: 'cobiro-dev-service'
+            cluster-name: 'cobiro-dev-cluster'
+            container-image-name-updates: 'container=cobiro-dev-service,tag=latest'
