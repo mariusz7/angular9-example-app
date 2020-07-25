@@ -13,10 +13,10 @@ jobs:
       - node/with-cache:
           steps:
             - browser-tools/install-chrome
-            - run: npm install
-            - run: npm run lint
-            - run: npm run test
-            - run: npm run build:prod
+            #- run: npm install
+            #- run: npm run lint
+            #- run: npm run test
+            #- run: npm run build:prod
 
 workflows:
     build-and-test:
