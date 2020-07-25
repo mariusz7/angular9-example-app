@@ -31,7 +31,8 @@ jobs:
 workflows:
     "Cobiro regular pipeline":
       jobs:
-        - build-and-test
+        - build-and-test:
+            name: "Build app. and run tests"
 
         - aws-ecr/build-and-push-image:
             name: "Dockerize app. and push to repository"
@@ -48,7 +49,7 @@ workflows:
             skip-when-tags-exist: false
             tag: 'latest,0.0.1'
             requires:
-            - build-and-test
+            - "Build app. and run tests"
 
         - aws-ecs/deploy-service-update:
             name: "Deploy to DEV"
