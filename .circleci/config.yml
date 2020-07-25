@@ -27,8 +27,6 @@ jobs:
             - setup_remote_docker
 
   create-image-and-push:
-    executor:
-      name: default
     steps:
       - checkout
       - attach_workspace:
