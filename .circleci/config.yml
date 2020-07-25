@@ -10,6 +10,7 @@ orbs:
 
 jobs:
   build-and-test:
+    name: "Build app. and run tests"
     executor:
       name: node/default
     steps:
@@ -58,6 +59,7 @@ workflows:
             container-image-name-updates: 'container=cobiro-dev-container,tag=latest'
 
         - deploy-to-qa-approval:
+            name: "Approval before deployment to QA"
             type: approval
             requires:
               - "Deploy to DEV"
@@ -71,6 +73,7 @@ workflows:
             container-image-name-updates: 'container=cobiro-qa-container,tag=latest'
 
         - deploy-to-prod-approval:
+            name: "Approval before deployment to PROD"
             type: approval
             requires:
               - "Deploy to QA"
