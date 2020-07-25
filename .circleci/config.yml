@@ -34,6 +34,7 @@ workflows:
         - build-and-test
 
         - aws-ecr/build-and-push-image:
+            name: "Build Docker image with app. and push to repository"
             account-url: AWS_ECR_ACCOUNT_URL
             aws-access-key-id: AWS_ACCESS_KEY_ID
             aws-secret-access-key: AWS_SECRET_ACCESS_KEY
@@ -52,7 +53,7 @@ workflows:
         - aws-ecs/deploy-service-update:
             name: "Deploy to DEV"
             requires:
-              - aws-ecr/build-and-push-image
+              - "Build Docker image with app. and push to repository"
             family: 'cobiro-dev-task-definition'
             cluster-name: 'cobiro-dev-cluster'
             service-name: 'cobiro-dev-service'
