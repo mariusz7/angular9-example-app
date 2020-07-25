@@ -66,7 +66,7 @@ workflows:
         - aws-ecs/deploy-service-update:
             name: "Deploy to QA"
             requires:
-              - deploy-to-qa-approval
+              - "Approval before deployment to QA"
             family: 'cobiro-qa-task-definition'
             cluster-name: 'cobiro-qa-cluster'
             service-name: 'cobiro-qa-service'
