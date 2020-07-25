@@ -28,7 +28,7 @@ jobs:
 
   create-image-and-push:
     executor:
-      name: node/default
+      name: default
     steps:
       - checkout
       - attach_workspace:
