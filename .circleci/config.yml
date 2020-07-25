@@ -24,6 +24,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - aws-cli/setup
+      - run: aws ecr describe-repositories
     
 
 workflows:
