@@ -28,8 +28,8 @@ jobs:
 
   create-image-and-push:
     steps:
-    - attach_workspace:
-        at: dist
+      - attach_workspace:
+          at: dist
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: AWS_ACCESS_KEY_ID
