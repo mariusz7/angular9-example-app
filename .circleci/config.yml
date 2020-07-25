@@ -110,3 +110,11 @@ workflows:
             filters:
               branches:
                 only: master
+
+    "Cobiro build check only":
+      jobs:
+        - build-and-test:
+            name: "Build app. and run tests"
+            filters:
+              branches:
+                ignore: master
