@@ -27,6 +27,8 @@ jobs:
             - setup_remote_docker
 
   create-image-and-push:
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
     steps:
       - attach_workspace:
           at: dist
