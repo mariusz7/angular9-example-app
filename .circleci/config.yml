@@ -30,6 +30,7 @@ jobs:
     docker:
       - image: circleci/node:9.9-stretch
     steps:
+      - checkout
       - attach_workspace:
           at: dist
       - run: pwd
@@ -39,6 +40,7 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           create-repo: true
+          checkout: false
           dockerfile: Dockerfile
           no-output-timeout: 5m
           path: .
