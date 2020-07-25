@@ -28,7 +28,7 @@ jobs:
 
   create-image-and-push:
     docker:
-      - image: circleci/node:9.9-stretch
+      - image: cimg/base:2020.01
     steps:
       - checkout
       - attach_workspace:
