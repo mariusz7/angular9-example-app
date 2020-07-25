@@ -50,6 +50,6 @@ workflows:
         - aws-ecs/deploy-service-update:
             requires:
               - aws-ecr/build-and-push-image
-            family: 'cobiro-dev-service'
+            family: 'cobiro-dev-task-definition'
             cluster-name: 'cobiro-dev-cluster'
             container-image-name-updates: 'container=cobiro-dev-service,tag=latest'
