@@ -16,16 +16,11 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            #- browser-tools/install-chrome
+            - browser-tools/install-chrome
             - run: npm install
-            #- run: npm run lint
-            #- run: npm run test
+            - run: npm run lint
+            - run: npm run test
             - run: npm run build:prod
-            - run: ls -la /home
-            - run: ls -la ~/
-            - run: ls -la ~/project
-            - run: ls -la ~/project/dist
-            - run: find ~ -name coverage
             - persist_to_workspace:
                 root: .
                 paths:
