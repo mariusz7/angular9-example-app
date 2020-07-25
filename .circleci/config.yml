@@ -52,4 +52,4 @@ workflows:
               - aws-ecr/build-and-push-image
             family: 'cobiro-dev-task-definition'
             cluster-name: 'cobiro-dev-cluster'
-            container-image-name-updates: 'container=cobiro-dev-service,tag=latest'
+            container-image-name-updates: 'container=cobiro-dev,tag=latest'
