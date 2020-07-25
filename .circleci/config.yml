@@ -48,6 +48,6 @@ workflows:
     build-and-test:
       jobs:
         - build-and-test
-        - create-image-and-push
+        - create-image-and-push:
             requires:
             - build-and-test
