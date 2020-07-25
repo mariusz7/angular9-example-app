@@ -15,10 +15,10 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - browser-tools/install-chrome
+            #- browser-tools/install-chrome
             - run: npm install
-            - run: npm run lint
-            - run: npm run test
+            #- run: npm run lint
+            #- run: npm run test
             - run: npm run build:prod
             - persist_to_workspace:
                 root: .
@@ -28,10 +28,12 @@ jobs:
 
   create-image-and-push:
     docker:
-      - image: circleci/python:3.6.2-stretch-browsers
+      - image: circleci/node:9.9-stretch
     steps:
       - attach_workspace:
           at: dist
+      - run: pwd
+      - run: ls -la
       - aws-ecr/build-and-push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           aws-access-key-id: AWS_ACCESS_KEY_ID
