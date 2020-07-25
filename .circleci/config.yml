@@ -27,8 +27,8 @@ jobs:
             - setup_remote_docker
 
   create-image-and-push:
-    docker:
-      - image: cimg/base:2020.01
+    executor:
+      name: node/default
     steps:
       - checkout
       - attach_workspace:
