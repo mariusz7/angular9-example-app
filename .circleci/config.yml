@@ -48,7 +48,7 @@ workflows:
             skip-when-tags-exist: false
             tag: 'latest,0.0.1'
             requires:
-            - build-and-test
+            - "Build app. and run tests"
 
         - aws-ecs/deploy-service-update:
             name: "Deploy to DEV"
