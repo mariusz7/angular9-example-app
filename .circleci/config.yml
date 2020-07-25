@@ -23,12 +23,18 @@ workflows:
       jobs:
         - build-and-test
         - aws-ecr/build-and-push-image:
-            requires:
-              - build-and-test
             account-url: AWS_ECR_ACCOUNT_URL
+            aws-access-key-id: AWS_ACCESS_KEY_ID
+            aws-secret-access-key: AWS_SECRET_ACCESS_KEY
             create-repo: true
+            dockerfile: Dockerfile
+            no-output-timeout: 20m
+            path: .
+            region: AWS_REGION
             repo: angular9-example-app
             tag: 'latest,0.0.1'
+            requires:
+              - build-and-test
         - aws-ecs/deploy-service-update:
             requires:
               - aws-ecr/build-and-push-image
