@@ -30,7 +30,7 @@ workflows:
             dockerfile: Dockerfile
             no-output-timeout: 5m
             path: .
-            region: AWS_REGION_ENV_VAR_NAME
+            region: AWS_REGION
             repo: angular9-example-app
             skip-when-tags-exist: false
             tag: 'latest,0.0.1'
