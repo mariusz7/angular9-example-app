@@ -1,4 +1,3 @@
 FROM nginx:1.17.1-alpine
-#COPY nginx.conf /etc/nginx/nginx.conf
-#COPY /dist/aston-villa-app /usr/share/nginx/html
-RUN echo "Docker image test"
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY /dist/browser /usr/share/nginx/html
