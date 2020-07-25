@@ -30,7 +30,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="topHeroes" datatype="html">
-        <source>Heroes most liked</source><target state="final">Heroes most liked</target>
+        <source>Heroes most liked2</source><target state="final">Heroes most liked2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">app/shared/pages/home-page/home-page.component.html</context>
           <context context-type="linenumber">4</context>
