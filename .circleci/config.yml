@@ -1,9 +1,10 @@
 version: 2.1
 orbs:
-  #node: circleci/node@1.1.6
-  #browser-tools: circleci/browser-tools@1.0.1
+  node: circleci/node@1.1.6
+  browser-tools: circleci/browser-tools@1.0.1
   aws-cli: circleci/aws-cli@1.2.1
   aws-ecr: circleci/aws-ecr@6.11.0
+  aws-ecs: circleci/aws-ecs@1.2.0
 
 
 jobs:
@@ -20,6 +21,7 @@ jobs:
             - run: npm run test
             - run: npm run build:prod
             - setup_remote_docker
+
   mk-tests:
     executor: aws-cli/default
     steps:
