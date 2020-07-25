@@ -26,26 +26,23 @@ jobs:
                   - dist
             - setup_remote_docker
 
-  create-image-and-push:
-    - aws-ecr/build-and-push-image:
-        account-url: AWS_ECR_ACCOUNT_URL
-        aws-access-key-id: AWS_ACCESS_KEY_ID
-        aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-        create-repo: true
-        attach-workspace: true
-        dockerfile: Dockerfile
-        no-output-timeout: 5m
-        path: .
-        region: AWS_REGION
-        repo: angular9-example-app
-        skip-when-tags-exist: false
-        tag: 'latest,0.0.1'
-
 
 workflows:
     build-and-test:
       jobs:
         - build-and-test
-        - create-image-and-push:
+        - aws-ecr/build-and-push-image:
+            account-url: AWS_ECR_ACCOUNT_URL
+            aws-access-key-id: AWS_ACCESS_KEY_ID
+            aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+            create-repo: true
+            attach-workspace: true
+            dockerfile: Dockerfile
+            no-output-timeout: 5m
+            path: .
+            region: AWS_REGION
+            repo: angular9-example-app
+            skip-when-tags-exist: false
+            tag: 'latest,0.0.1'
             requires:
             - build-and-test
