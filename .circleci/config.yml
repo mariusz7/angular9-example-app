@@ -12,12 +12,12 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - browser-tools/install-chrome
+            #- browser-tools/install-chrome
             #- run: npm install
             #- run: npm run lint
             #- run: npm run test
             #- run: npm run build:prod
-
+            - run: echo "Skipped building"
 workflows:
     build-and-test:
       jobs:
@@ -28,16 +28,16 @@ workflows:
             aws-secret-access-key: AWS_SECRET_ACCESS_KEY
             create-repo: true
             dockerfile: Dockerfile
-            no-output-timeout: 20m
+            no-output-timeout: 5m
             path: .
             region: AWS_REGION
             repo: angular9-example-app
             tag: 'latest,0.0.1'
             requires:
               - build-and-test
-        - aws-ecs/deploy-service-update:
-            requires:
-              - aws-ecr/build-and-push-image
-            family: "${AWS_RESOURCE_NAME_PREFIX}-service"
-            cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
-            container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=latest"
+        #- aws-ecs/deploy-service-update:
+        #    requires:
+        #      - aws-ecr/build-and-push-image
+        #    family: "${AWS_RESOURCE_NAME_PREFIX}-service"
+        #    cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+        #    container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=latest"
