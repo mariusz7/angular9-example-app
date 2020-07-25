@@ -24,6 +24,8 @@ jobs:
             - run: ls -la /home
             - run: ls -la ~/
             - run: ls -la ~/project
+            - run: ls -la ~/project/dist
+            - run: find ~ -name coverage
             - persist_to_workspace:
                 root: .
                 paths:
