@@ -16,7 +16,7 @@ jobs:
             - run: npm run lint
             - run: npm run test
             - run: npm run build:prod
-            - setup_remote_docker
+            #- setup_remote_docker
 
 workflows:
     build-and-test:
