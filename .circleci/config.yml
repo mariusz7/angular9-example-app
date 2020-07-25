@@ -18,6 +18,7 @@ jobs:
             #- run: npm run test
             #- run: npm run build:prod
             - run: echo "Skipped building"
+            - setup_remote_docker
 workflows:
     build-and-test:
       jobs:
@@ -34,7 +35,7 @@ workflows:
             repo: angular9-example-app
             tag: 'latest,0.0.1'
             requires:
-              - build-and-test
+            - build-and-test
         #- aws-ecs/deploy-service-update:
         #    requires:
         #      - aws-ecr/build-and-push-image
