@@ -21,6 +21,9 @@ jobs:
             #- run: npm run lint
             #- run: npm run test
             - run: npm run build:prod
+            - run: ls -la /home
+            - run: ls -la ~/
+            - run: ls -la ~/project
             - persist_to_workspace:
                 root: .
                 paths:
