@@ -10,7 +10,6 @@ orbs:
 
 jobs:
   build-and-test:
-    name: "Build app. and run tests"
     executor:
       name: node/default
     steps:
@@ -32,7 +31,9 @@ jobs:
 workflows:
     "Cobiro regular pipeline":
       jobs:
-        - build-and-test
+        - build-and-test:
+            name: "Build app. and run tests"
+
         - aws-ecr/build-and-push-image:
             account-url: AWS_ECR_ACCOUNT_URL
             aws-access-key-id: AWS_ACCESS_KEY_ID
