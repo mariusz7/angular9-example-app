@@ -58,3 +58,21 @@ workflows:
             type: approval
             requires:
               - aws-ecs/deploy-service-update
+        - aws-ecs/deploy-service-update:
+            requires:
+              - deploy-to-qa-approval
+            family: 'cobiro-qa-task-definition'
+            cluster-name: 'cobiro-qa-cluster'
+            service-name: 'cobiro-qa-service'
+            container-image-name-updates: 'container=cobiro-qa-container,tag=latest'
+        - deploy-to-prod-approval:
+            type: approval
+            requires:
+              - aws-ecs/deploy-service-update
+        - aws-ecs/deploy-service-update:
+            requires:
+              - deploy-to-prod-approval
+            family: 'cobiro-prod-task-definition'
+            cluster-name: 'cobiro-prod-cluster'
+            service-name: 'cobiro-prod-service'
+            container-image-name-updates: 'container=cobiro-prod-container,tag=latest'
