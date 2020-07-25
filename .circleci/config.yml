@@ -27,8 +27,31 @@ jobs:
                   - dist
             - setup_remote_docker
 
+  build-and-test-just-check:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - browser-tools/install-chrome
+            - run: npm install
+            - run: npm run lint
+            - run: npm run test
+            - run: npm run build:prod
+
 
 workflows:
+
+    "Cobiro build check only":
+      jobs:
+        - build-and-test-just-check:
+            name: "Build app. and run tests for side branches"
+            filters:
+              branches:
+                ignore: master
+
+
     "Cobiro regular pipeline":
       jobs:
         - build-and-test:
