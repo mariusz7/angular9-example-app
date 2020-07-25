@@ -54,6 +54,6 @@ workflows:
             cluster-name: 'cobiro-dev-cluster'
             service-name: 'cobiro-dev-service'
             container-image-name-updates: 'container=cobiro-dev-container,tag=latest'
-         - deploy-to-qa-approval:
+        - deploy-to-qa-approval:
             type: approval
             requires: aws-ecs/deploy-service-update
