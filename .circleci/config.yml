@@ -78,22 +78,22 @@ workflows:
 
     "Cobiro regular pipeline":
       jobs:
-        - run-lint
+        - run-lint:
             filters:
               branches:
                 only: master
 
-        - run-sonarqube
+        - run-sonarqube:
             filters:
               branches:
                 only: master
 
-        - run-test
+        - run-test:
             filters:
               branches:
                 only: master
 
-        - build
+        - build:
             filters:
               branches:
                 only: master
