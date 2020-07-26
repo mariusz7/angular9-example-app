@@ -79,16 +79,21 @@ workflows:
     "Cobiro regular pipeline":
       jobs:
         - run-lint
+            filters:
+              branches:
+                only: master
+
         - run-sonarqube
+            filters:
+              branches:
+                only: master
+
         - run-test
+            filters:
+              branches:
+                only: master
+
         - build
-        - build-and-test:
-            name: "Build app. and run tests"
-            requires:
-              - run-lint
-              - run-sonarqube
-              - run-test
-              - build
             filters:
               branches:
                 only: master
@@ -108,7 +113,10 @@ workflows:
             skip-when-tags-exist: false
             tag: "latest,${CIRCLE_SHA1}"
             requires:
-            - "Build app. and run tests"
+              - run-lint
+              - run-sonarqube
+              - run-test
+              - build
             filters:
               branches:
                 only: master
