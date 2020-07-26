@@ -9,23 +9,54 @@ orbs:
 
 
 jobs:
-  build-and-test:
+  run-lint:
     executor:
       name: node/default
     steps:
       - checkout
       - node/with-cache:
           steps:
-            - browser-tools/install-chrome
             - run: npm install
             - run: npm run lint
+
+  run-sonarqube:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: echo "Running Sonarqube..."
+
+  run-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
             - run: npm run test
+  build:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
             - run: npm run build:prod
             - persist_to_workspace:
                 root: .
                 paths:
                   - dist
-            #- setup_remote_docker
+
+  build-and-test:
+    requires:
+      - run-lint
+      - run-sonarqube
+      - run-test
+      - build
 
   build-and-test-just-check:
     executor:
