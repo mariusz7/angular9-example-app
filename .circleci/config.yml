@@ -51,7 +51,6 @@ jobs:
                 paths:
                   - dist
 
-
   build-and-test-just-check:
     executor:
       name: node/default
@@ -79,6 +78,10 @@ workflows:
 
     "Cobiro regular pipeline":
       jobs:
+        - run-lint
+        - run-sonarqube
+        - run-test
+        - build
         - build-and-test:
             name: "Build app. and run tests"
             requires:
