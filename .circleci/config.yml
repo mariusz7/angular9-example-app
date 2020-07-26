@@ -52,6 +52,8 @@ jobs:
                   - dist
 
   build-and-test:
+    executor:
+      name: node/default
     requires:
       - run-lint
       - run-sonarqube
