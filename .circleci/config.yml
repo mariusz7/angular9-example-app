@@ -51,14 +51,6 @@ jobs:
                 paths:
                   - dist
 
-  build-and-test:
-    executor:
-      name: node/default
-    requires:
-      - run-lint
-      - run-sonarqube
-      - run-test
-      - build
 
   build-and-test-just-check:
     executor:
@@ -89,6 +81,11 @@ workflows:
       jobs:
         - build-and-test:
             name: "Build app. and run tests"
+            requires:
+              - run-lint
+              - run-sonarqube
+              - run-test
+              - build
             filters:
               branches:
                 only: master
