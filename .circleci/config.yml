@@ -35,6 +35,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
+            - browser-tools/install-chrome
             - run: npm install
             - run: npm run test
   build:
