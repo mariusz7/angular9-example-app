@@ -16,7 +16,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm ci
+            - run: npm install
             - run: npm run lint
 
   run-sonarqube:
@@ -36,7 +36,7 @@ jobs:
       - node/with-cache:
           steps:
             - browser-tools/install-chrome
-            - run: npm ci
+            - run: npm install
             - run: npm run test
   build:
     executor:
@@ -45,7 +45,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm ci
+            - run: npm install
             - run: npm run build:prod
             - persist_to_workspace:
                 root: .
@@ -60,7 +60,7 @@ jobs:
       - node/with-cache:
           steps:
             - browser-tools/install-chrome
-            - run: npm ci
+            - run: npm install
             - run: npm run lint
             - run: npm run test
             - run: npm run build:prod
