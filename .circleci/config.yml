@@ -50,10 +50,11 @@ jobs:
             - run: npm run test
             #- run: node ./node_modules/@angular/cli/bin/ng version
   build:
-    executor:
-      name: node/default
+    docker:
+      # TODO specific version instead of latest
+      - image: circleci/node:latest
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
-    resource_class: large
+    #resource_class: large
     steps:
       - run: free -h --si
       #- run: cat /proc/meminfo
