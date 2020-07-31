@@ -127,9 +127,9 @@ workflows:
 
 
 
-    "Moved away from pipeline for now":
+    "Moved away from pipeline for now (since YML lacks block comments)":
       jobs:
-        - aws-ecr/build-and-push-image:
+        - dummy-job-label:
             name: "Dockerize app. and push to repository"
             filters:
               branches:
