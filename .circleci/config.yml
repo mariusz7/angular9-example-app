@@ -13,7 +13,7 @@ jobs:
   build:
     docker:
       # TODO specific version instead of latest
-      - image: circleci/node:14.7.0
+      - image: circleci/node:14.7.0-browsers
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
     #resource_class: large
     steps:
@@ -32,8 +32,8 @@ jobs:
                   - dist
 
   run-test:
-    executor:
-      name: node/default
+    docker:
+      image: circleci/node:14.7.0-browsers
     steps:
       - run: free -h --si
       #- run: cat /proc/meminfo
@@ -41,7 +41,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - browser-tools/install-chrome
+            #- browser-tools/install-chrome
             - run: npm install
             - run: npm run test
             #- run: node ./node_modules/@angular/cli/bin/ng version
