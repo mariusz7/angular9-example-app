@@ -21,7 +21,6 @@ jobs:
           steps:
             - run: npm install
             - run: npm run lint
-            - run: ng version
 
 
   run-sonarqube:
@@ -35,7 +34,6 @@ jobs:
       - node/with-cache:
           steps:
             - run: echo "Running Sonarqube..."
-            - run: ng version
 
   run-test:
     executor:
@@ -50,7 +48,7 @@ jobs:
             - browser-tools/install-chrome
             - run: npm install
             - run: npm run test
-            - run: ng version
+            - run: node ./node_modules/@angular/cli/bin/ng version
   build:
     executor:
       name: node/default
@@ -65,7 +63,7 @@ jobs:
           steps:
             - run: npm install
             - run: npm run build:prod
-            - run: ng version
+            - run: node ./node_modules/@angular/cli/bin/ng version
             - persist_to_workspace:
                 root: .
                 paths:
