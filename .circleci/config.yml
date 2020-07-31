@@ -14,7 +14,7 @@ jobs:
       name: node/default
     steps:
       - run: free -h --si
-      - run: cat /proc/meminfo
+      #- run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
@@ -28,7 +28,7 @@ jobs:
       name: node/default
     steps:
       - run: free -h --si
-      - run: cat /proc/meminfo
+      #- run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
@@ -40,7 +40,7 @@ jobs:
       name: node/default
     steps:
       - run: free -h --si
-      - run: cat /proc/meminfo
+      #- run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
@@ -48,7 +48,7 @@ jobs:
             - browser-tools/install-chrome
             - run: npm install
             - run: npm run test
-            - run: node ./node_modules/@angular/cli/bin/ng version
+            #- run: node ./node_modules/@angular/cli/bin/ng version
   build:
     executor:
       name: node/default
@@ -56,14 +56,14 @@ jobs:
     resource_class: large
     steps:
       - run: free -h --si
-      - run: cat /proc/meminfo
+      #- run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
           steps:
             - run: npm install
             - run: npm run build:prod
-            - run: node ./node_modules/@angular/cli/bin/ng version
+            #- run: node ./node_modules/@angular/cli/bin/ng version
             - persist_to_workspace:
                 root: .
                 paths:
