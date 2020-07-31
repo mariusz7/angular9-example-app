@@ -137,10 +137,10 @@ workflows:
             skip-when-tags-exist: false
             tag: "latest,${CIRCLE_SHA1}"
             requires:
+              - build
+              - run-test
               - run-lint
               - run-sonarqube
-              - run-test
-              - build
             filters:
               branches:
                 only: master
