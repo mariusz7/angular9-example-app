@@ -13,6 +13,7 @@ jobs:
     executor:
       name: node/default
     steps:
+      - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
           steps:
@@ -23,6 +24,7 @@ jobs:
     executor:
       name: node/default
     steps:
+      - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
           steps:
@@ -32,6 +34,7 @@ jobs:
     executor:
       name: node/default
     steps:
+      - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
           steps:
@@ -44,6 +47,7 @@ jobs:
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
     resource_class: large
     steps:
+      - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
           steps:
