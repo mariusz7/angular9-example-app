@@ -129,6 +129,12 @@ workflows:
 
     "Moved away from pipeline for now":
       jobs:
+        - aws-ecr/build-and-push-image:
+            name: "Dockerize app. and push to repository"
+            filters:
+              branches:
+                only: dummy-branch-name
+
         - aws-ecs/deploy-service-update:
             name: "Deploy to DEV"
             requires:
