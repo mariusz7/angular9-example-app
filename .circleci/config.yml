@@ -41,6 +41,8 @@ jobs:
   build:
     executor:
       name: node/default
+    # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
+    resource_class: large
     steps:
       - checkout
       - node/with-cache:
