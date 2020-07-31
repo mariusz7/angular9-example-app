@@ -13,7 +13,7 @@
     "test:app:watch": "ng test angularexampleapp --code-coverage --watch=true",
     "test:library:watch": "ng test ngx-example-library --code-coverage --watch=true",
     "e2e": "ng e2e",
-    "build:prod": "ng build --configuration=production",
+    "build:prod": "ng build --configuration=production --source-map=false",
     "build:prod:es": "ng build --configuration=production-es",
     "builds:prod": "npm run build:prod && npm run build:prod:es",
     "build:ssr:prod": "npm run builds:prod && ng run angularexampleapp:server:production",
