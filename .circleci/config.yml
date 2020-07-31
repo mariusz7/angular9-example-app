@@ -34,6 +34,7 @@ jobs:
       - node/with-cache:
           steps:
             - run: echo "Running Sonarqube..."
+            - run: sleep 30 # Fake SQ run. For demo hope it is enough.
 
   run-test:
     executor:
@@ -97,6 +98,16 @@ workflows:
 
     "Cobiro regular pipeline":
       jobs:
+        - build:
+            filters:
+              branches:
+                only: master
+
+        - run-test:
+            filters:
+              branches:
+                only: master
+
         - run-lint:
             filters:
               branches:
@@ -107,15 +118,7 @@ workflows:
               branches:
                 only: master
 
-        - run-test:
-            filters:
-              branches:
-                only: master
 
-        - build:
-            filters:
-              branches:
-                only: master
 
         - aws-ecr/build-and-push-image:
             name: "Dockerize app. and push to repository"
