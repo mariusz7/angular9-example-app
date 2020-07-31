@@ -13,6 +13,7 @@ jobs:
     executor:
       name: node/default
     steps:
+      - run: ng version
       - run: free -h --si
       - run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
@@ -26,6 +27,7 @@ jobs:
     executor:
       name: node/default
     steps:
+      - run: ng version
       - run: free -h --si
       - run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
@@ -38,6 +40,7 @@ jobs:
     executor:
       name: node/default
     steps:
+      - run: ng version
       - run: free -h --si
       - run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
@@ -53,6 +56,7 @@ jobs:
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
     resource_class: large
     steps:
+      - run: ng version
       - run: free -h --si
       - run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
