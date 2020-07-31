@@ -9,47 +9,7 @@ orbs:
 
 
 jobs:
-  run-lint:
-    executor:
-      name: node/default
-    steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-            - run: npm run lint
 
-
-  run-sonarqube:
-    executor:
-      name: node/default
-    steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: echo "Running Sonarqube..."
-            - run: sleep 30 # Fake SQ run. For demo hope it is enough.
-
-  run-test:
-    executor:
-      name: node/default
-    steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
-      - node/with-cache:
-          steps:
-            - browser-tools/install-chrome
-            - run: npm install
-            - run: npm run test
-            #- run: node ./node_modules/@angular/cli/bin/ng version
   build:
     docker:
       # TODO specific version instead of latest
@@ -70,6 +30,48 @@ jobs:
                 root: .
                 paths:
                   - dist
+
+  run-test:
+    executor:
+      name: node/default
+    steps:
+      - run: free -h --si
+      #- run: cat /proc/meminfo
+      - run: cat /proc/cpuinfo
+      - checkout
+      - node/with-cache:
+          steps:
+            - browser-tools/install-chrome
+            - run: npm install
+            - run: npm run test
+            #- run: node ./node_modules/@angular/cli/bin/ng version
+
+  run-lint:
+    executor:
+      name: node/default
+    steps:
+      - run: free -h --si
+      #- run: cat /proc/meminfo
+      - run: cat /proc/cpuinfo
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm run lint
+
+  run-sonarqube:
+    executor:
+      name: node/default
+    steps:
+      - run: free -h --si
+      #- run: cat /proc/meminfo
+      - run: cat /proc/cpuinfo
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: echo "Running Sonarqube..."
+            - run: sleep 30 # Fake SQ run. For demo hope it is enough.
+
 
   build-and-test-just-check:
     executor:
