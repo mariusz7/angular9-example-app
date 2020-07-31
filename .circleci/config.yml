@@ -121,3 +121,57 @@ workflows:
             filters:
               branches:
                 only: master
+
+        - aws-ecs/deploy-service-update:
+            name: "Deploy to DEV"
+            requires:
+              - "Dockerize app. and push to repository"
+            family: 'cobiro-dev-task-definition'
+            cluster-name: 'cobiro-dev-cluster'
+            service-name: 'cobiro-dev-service'
+            container-image-name-updates: "container=cobiro-dev-container,tag=${CIRCLE_SHA1}"
+            filters:
+              branches:
+                only: master
+
+        - deploy-to-qa-approval:
+            name: "Approval before deployment to QA"
+            type: approval
+            requires:
+              - "Deploy to DEV"
+            filters:
+              branches:
+                only: master
+
+        - aws-ecs/deploy-service-update:
+            name: "Deploy to QA"
+            requires:
+              - "Approval before deployment to QA"
+            family: 'cobiro-qa-task-definition'
+            cluster-name: 'cobiro-qa-cluster'
+            service-name: 'cobiro-qa-service'
+            container-image-name-updates: "container=cobiro-qa-container,tag=${CIRCLE_SHA1}"
+            filters:
+              branches:
+                only: master
+
+        - deploy-to-prod-approval:
+            name: "Approval before deployment to PROD"
+            type: approval
+            requires:
+              - "Deploy to QA"
+            filters:
+              branches:
+                only: master
+
+        - aws-ecs/deploy-service-update:
+            name: "Deploy to PROD"
+            requires:
+              - "Approval before deployment to PROD"
+            family: 'cobiro-prod-task-definition'
+            cluster-name: 'cobiro-prod-cluster'
+            service-name: 'cobiro-prod-service'
+            container-image-name-updates: "container=cobiro-prod-container,tag=${CIRCLE_SHA1}"
+            filters:
+              branches:
+                only: master
