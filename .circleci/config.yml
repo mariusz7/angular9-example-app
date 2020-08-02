@@ -72,6 +72,14 @@ jobs:
             - run: echo "Running Sonarqube..."
             - run: sleep 30 # Fake SQ run. For demo hope it is enough.
 
+  run-smoke-tests:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: echo "Running smoke tests [placeholder]"
 
   build-and-test-just-check:
     executor:
@@ -157,11 +165,20 @@ workflows:
               branches:
                 only: master
 
+        - run-smoke-tests:
+            name: "Smoke tests after deploying to DEV"
+            requires:
+              - "Deploy to DEV"
+            filters:
+              branches:
+                only: master
+
+
         - deploy-to-qa-approval:
             name: "Approval before deployment to QA"
             type: approval
             requires:
-              - "Deploy to DEV"
+              - "Smoke tests after deploying to DEV"
             filters:
               branches:
                 only: master
