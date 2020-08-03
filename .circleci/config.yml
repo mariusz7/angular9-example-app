@@ -34,6 +34,7 @@ jobs:
   run-test:
     docker:
       - image: circleci/node:14.6.0-browsers
+    parallelism: 4
     steps:
       - run: free -h --si
       #- run: cat /proc/meminfo
