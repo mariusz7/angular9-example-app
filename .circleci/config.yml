@@ -60,12 +60,9 @@ jobs:
       
 
   run-lint:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
       - get-source-code
       - node/with-cache:
           steps:
@@ -73,8 +70,8 @@ jobs:
             - run: npm run lint
 
   run-sonarqube:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
       - run: free -h --si
       #- run: cat /proc/meminfo
@@ -86,26 +83,25 @@ jobs:
             - run: sleep 30 # Fake SQ run. Hope it is enough for just a demo.
 
   run-smoke-tests:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
       - run: echo "Running smoke tests [placeholder]"
 
   run-uat:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
       - run: echo "Running User Acceptance Tests [placeholder]"
 
 
   build-and-test-just-check:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
       - get-source-code
       - node/with-cache:
           steps:
-            - browser-tools/install-chrome
             - run: npm install
             - run: npm run lint
             - run: npm run test
