@@ -7,15 +7,9 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.11.0
   aws-ecs: circleci/aws-ecs@1.2.0
 
-
-jobs:
-
-  build:
-    docker:
-      # TODO specific version instead of latest
-      - image: circleci/node:14.6.0-browsers
-    # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
-    #resource_class: large
+commands:
+  get-source-code:
+    description: "Get source code from cache, if possible"
     steps:
       - restore_cache:
           keys:
@@ -28,6 +22,16 @@ jobs:
           paths:
             - ".git"
 
+jobs:
+
+  build:
+    docker:
+      # TODO specific version instead of latest
+      - image: circleci/node:14.6.0-browsers
+    # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
+    #resource_class: large
+    steps:
+      - get-source-code
       - node/with-cache:
           steps:
             - run: npm install
@@ -44,9 +48,6 @@ jobs:
     # Depending on the number of tests, we can increase number of parallel runs:
     parallelism: 2
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
       - checkout
       - node/with-cache:
           steps:
