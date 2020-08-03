@@ -34,7 +34,8 @@ jobs:
   run-test:
     docker:
       - image: circleci/node:14.6.0-browsers
-    parallelism: 4
+    # Depending on the number of tests, we can increase number of parallel runs:
+    parallelism: 2
     steps:
       - run: free -h --si
       #- run: cat /proc/meminfo
@@ -46,6 +47,9 @@ jobs:
             - run: npm install
             - run: npm run test
             #- run: node ./node_modules/@angular/cli/bin/ng version
+      - run: ls -la ./
+      - run: ls -la ../
+      
 
   run-lint:
     executor:
