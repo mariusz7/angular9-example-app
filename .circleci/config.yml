@@ -34,16 +34,14 @@ jobs:
       - get-source-code
       - node/with-cache:
           steps:
-            - run: id
             - run: npm install
             - run: npm run build:prod
             - persist_to_workspace:
                 root: .
                 paths:
                   - dist
-      - slack/notify:
-          color: '#42e2f4'
-          message: Slack notification from a build
+            - run: npm run e2e
+      - slack/notify-on-failure
 
   run-test:
     docker:
@@ -54,12 +52,8 @@ jobs:
       - get-source-code
       - node/with-cache:
           steps:
-            #- browser-tools/install-chrome
             - run: npm install
             - run: npm run test
-            #- run: node ./node_modules/@angular/cli/bin/ng version
-      - run: ls -la ./
-      - run: ls -la ../
       
 
   run-lint:
@@ -76,9 +70,6 @@ jobs:
     docker:
       - image: circleci/node:14.6.0-browsers
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
       - get-source-code
       - node/with-cache:
           steps:
