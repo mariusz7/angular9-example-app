@@ -40,7 +40,6 @@ jobs:
                 root: .
                 paths:
                   - dist
-            - run: npm run e2e
       - slack/notify-on-failure
 
   run-test:
@@ -54,6 +53,7 @@ jobs:
           steps:
             - run: npm install
             - run: npm run test
+      - slack/notify-on-failure
       
 
   run-lint:
@@ -65,6 +65,7 @@ jobs:
           steps:
             - run: npm install
             - run: npm run lint
+      - slack/notify-on-failure
 
   run-sonarqube:
     docker:
@@ -75,18 +76,21 @@ jobs:
           steps:
             - run: echo "Running Sonarqube [placeholder]"
             - run: sleep 30 # Fake SQ run. Hope it is enough for just a demo.
+      - slack/notify-on-failure
 
   run-smoke-tests:
     docker:
       - image: circleci/node:14.6.0-browsers
     steps:
       - run: echo "Running smoke tests [placeholder]"
+      - slack/notify-on-failure
 
   run-uat:
     docker:
       - image: circleci/node:14.6.0-browsers
     steps:
       - run: echo "Running User Acceptance Tests [placeholder]"
+      - slack/notify-on-failure
 
 
   build-and-test-just-check:
@@ -100,6 +104,7 @@ jobs:
             - run: npm run lint
             - run: npm run test
             - run: npm run build:prod
+      - slack/notify-on-failure
 
 
 workflows:
