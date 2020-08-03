@@ -33,9 +33,9 @@ jobs:
       - get-source-code
       - node/with-cache:
           steps:
+            - run: id
             - run: npm install
             - run: npm run build:prod
-            #- run: node ./node_modules/@angular/cli/bin/ng version
             - persist_to_workspace:
                 root: .
                 paths:
