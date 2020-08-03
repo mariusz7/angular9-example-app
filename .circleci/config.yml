@@ -17,10 +17,17 @@ jobs:
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
     #resource_class: large
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
       - node/with-cache:
           steps:
             - run: npm install
