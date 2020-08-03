@@ -48,7 +48,7 @@ jobs:
     # Depending on the number of tests, we can increase number of parallel runs:
     parallelism: 2
     steps:
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             #- browser-tools/install-chrome
@@ -66,7 +66,7 @@ jobs:
       - run: free -h --si
       #- run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             - run: npm install
@@ -79,7 +79,7 @@ jobs:
       - run: free -h --si
       #- run: cat /proc/meminfo
       - run: cat /proc/cpuinfo
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             - run: echo "Running Sonarqube [placeholder]"
@@ -102,7 +102,7 @@ jobs:
     executor:
       name: node/default
     steps:
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             - browser-tools/install-chrome
