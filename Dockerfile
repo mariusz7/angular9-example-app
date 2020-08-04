@@ -10,3 +10,4 @@ RUN ls -la /etc/
 RUN ls -la /etc/nginx/ || true
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./dist/browser /usr/share/nginx/html
+RUN id
