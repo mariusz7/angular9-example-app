@@ -1,4 +1,4 @@
-# 2nd task
+# 2nd task with answers
 
 Please optimise the pipeline to follow the Continuous Deployment approach.
 
@@ -19,13 +19,10 @@ Things to consider are:
   - Give more memory for production build with change in package.json:
 
     ```
-    "build:prod": "ng build --configuration=production",
-    o:
-    ",
-    /)
-
-    2)
-    B)
+    from:
+        "build:prod": "ng build --configuration=production",
+    to:
+        "build:prod": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --configuration=production",
     ```
 
   - Configure more powerful building machine with 'resource_class' keyword:
@@ -36,6 +33,7 @@ Things to consider are:
   - Ask developers to use smaller packages for the job with less dependencies
 
 * how would you notify the team if something went wrong?
+
   - Setup Default Notifications: https://app.circleci.com/settings/user/notifications
   - Project Notifications: https://app.circleci.com/settings/user/notifications
   - Enable Web Notifications: https://app.circleci.com/settings/user/notifications
@@ -44,11 +42,35 @@ Things to consider are:
   - Setup IRC notifications: https://circleci.com/docs/2.0/notifications/#using-the-irc-orb
   - Setup third party CircleCI notification orbs, that can be explored here:
     https://circleci.com/orbs/registry/
+
 * how would you implement feature flags?
+
+  - I already know from Luke, that Optimizely is used in Cobiro. So, I created account there, added
+    TopMsgFeature feature and made use of it in the demo application. We can verify it during the
+    second meeting.
+
 * how do feature flags affect testing?
+
 * what is your roll back strategy?
+  - The basic way is
+
+- The most straightforward approach with CircleCI would be to go to its UI, navigate to the pipeline
+  that deployed version you want to rollback to and click **Rerun -> Rerun Job with SSH**:
+
+  ![alt text](https://i.imgur.com/ZUlwojP.png 'Screenshot from CircieCI showing Rerun Job with SSH option')
+
+  This way we can switch between any deployed versions of the application (assuming there are no
+  other breaking things like database schema change).
+
 * please take advantage of smoke tests
+
+  - Added _Smoke tests after deploying to DEV_ job to _.circleci/config.yml_
+
 * please add a job for acceptance tests
+
+  - Added _User Acceptance Testing on QA_ job to _.circleci/config.yml_
+
 * assuming that acceptance test can run 1 hour but developers can push multiple times a day, how do
   you solve a problem of running these tests?
+
 * What is your zero down time deployment strategy?
