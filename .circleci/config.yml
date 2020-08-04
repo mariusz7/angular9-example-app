@@ -6,97 +6,105 @@ orbs:
   browser-tools: circleci/browser-tools@1.0.1
   aws-ecr: circleci/aws-ecr@6.11.0
   aws-ecs: circleci/aws-ecs@1.2.0
+  slack: circleci/slack@3.4.2
 
+commands:
+  get-source-code:
+    description: "Get source code from cache, if possible"
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
 
 jobs:
 
   build:
     docker:
-      # TODO specific version instead of latest
       - image: circleci/node:14.6.0-browsers
-    # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB)
-    #resource_class: large
+    # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB):
+    resource_class: large
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             - run: npm install
             - run: npm run build:prod
-            #- run: node ./node_modules/@angular/cli/bin/ng version
             - persist_to_workspace:
                 root: .
                 paths:
                   - dist
+      - slack/notify-on-failure
 
   run-test:
     docker:
       - image: circleci/node:14.6.0-browsers
+    # Depending on the number of tests, we can increase number of parallel runs:
+    parallelism: 2
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
-            #- browser-tools/install-chrome
             - run: npm install
             - run: npm run test
-            #- run: node ./node_modules/@angular/cli/bin/ng version
+      - slack/notify-on-failure
+      
 
   run-lint:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             - run: npm install
             - run: npm run lint
+      - slack/notify-on-failure
 
   run-sonarqube:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
-      - run: free -h --si
-      #- run: cat /proc/meminfo
-      - run: cat /proc/cpuinfo
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
             - run: echo "Running Sonarqube [placeholder]"
             - run: sleep 30 # Fake SQ run. Hope it is enough for just a demo.
+      - slack/notify-on-failure
 
   run-smoke-tests:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
       - run: echo "Running smoke tests [placeholder]"
+      - slack/notify-on-failure
 
   run-uat:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
       - run: echo "Running User Acceptance Tests [placeholder]"
+      - slack/notify-on-failure
 
 
   build-and-test-just-check:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:14.6.0-browsers
     steps:
-      - checkout
+      - get-source-code
       - node/with-cache:
           steps:
-            - browser-tools/install-chrome
             - run: npm install
             - run: npm run lint
             - run: npm run test
             - run: npm run build:prod
+      - slack/notify-on-failure
 
 
 workflows:
