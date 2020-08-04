@@ -33,9 +33,23 @@
   <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
   <link rel="manifest" href="/manifest.webmanifest">
-</head>
+  <script src="https://unpkg.com/@optimizely/optimizely-sdk/dist/optimizely.browser.umd.min.js"></script>
+  <script src="https://cdn.optimizely.com/datafiles/XtPwwgcqpDf1TxRky2Q9t.json/tag.js"></script></head>
 <body>
-<!-- Google Tag Manager (noscript) -->
+  <h1 class="header__title" id="demo"></h1>
+  <script>
+      var optimizelyClientInstance = window.optimizelySdk.createInstance({
+        datafile: window.optimizelyDatafile
+      })
+      const isFeatureEnabled = optimizelyClientInstance.isFeatureEnabled('topmsgfeature', 'user123');
+      if (isFeatureEnabled) {
+        document.getElementById("demo").innerHTML = "TopMsgFeature is ON";
+      } else {
+        document.getElementById("demo").innerHTML = "TopMsgFeature is OFF";
+      }
+    </script>
+
+  <!-- Google Tag Manager (noscript) -->
 <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TF7QP5M"
           height="0" width="0" style="display:none;visibility:hidden"></iframe>
