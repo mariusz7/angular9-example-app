@@ -29,7 +29,7 @@ jobs:
     docker:
       - image: circleci/node:14.6.0-browsers
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB):
-    resource_class: large
+    # resource_class: large
     steps:
       - get-source-code
       - node/with-cache:
@@ -42,7 +42,6 @@ jobs:
                   - dist
       - store_artifacts:
           path: ./dist/browser
-          destination: artifact-file
       - slack/notify-on-failure
 
   run-test:
