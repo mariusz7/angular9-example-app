@@ -30,6 +30,7 @@ jobs:
       - image: circleci/node:14.6.0-browsers
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB):
     # resource_class: large
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -47,6 +48,7 @@ jobs:
   run-test:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     # Depending on the number of tests, we can increase number of parallel runs:
     parallelism: 2
     steps:
@@ -61,6 +63,7 @@ jobs:
   run-lint:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -72,6 +75,7 @@ jobs:
   run-sonarqube:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -83,6 +87,7 @@ jobs:
   run-smoke-tests:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - run: echo "Running smoke tests [placeholder]"
       - slack/notify-on-failure
@@ -90,6 +95,7 @@ jobs:
   run-uat:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - run: echo "Running User Acceptance Tests [placeholder]"
       - slack/notify-on-failure
@@ -98,6 +104,7 @@ jobs:
   build-and-test-just-check:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
