@@ -53,18 +53,26 @@ Things to consider are:
 
 * what is your roll back strategy?
 
-  - AWS ECS already supports health checks
+  - First let's state, that we can have manual or automated rollbacks (or both covering different
+    failure cases).
+  - Manual rollbacks
 
-  - The most straightforward approach with CircleCI would be to go to its UI, navigate to the
-    pipeline that deployed version you want to rollback to and click **Rerun -> Rerun Job with
-    SSH**:
+    - The most straightforward approach with CircleCI would be to go to its UI, navigate to the
+      pipeline that deployed version you want to rollback to and click **Rerun -> Rerun Job with
+      SSH**:
 
-    ![alt text](https://i.imgur.com/ZUlwojP.png 'Screenshot from CircieCI showing Rerun Job with SSH option')
+      ![alt text](https://i.imgur.com/ZUlwojP.png 'Screenshot from CircieCI showing Rerun Job with SSH option')
 
-  This way we can switch between any deployed versions of the application (assuming there are no
-  other breaking things like database schema change).
+      This way we can switch between any deployed versions of the application (assuming there are no
+      other breaking things like database schema change).
 
-  - What can work in some simpler cases, is to turn breaking feature off in Optimizely.
+    - What can work in some simpler cases, is to turn breaking feature off in Optimizely.
+
+  - Automated rollbacks
+
+    - AWS ECS already supports health checks...
+
+    - TODO the one from open tab in my m8
 
 * **DONE** please take advantage of smoke tests
 
@@ -77,9 +85,9 @@ Things to consider are:
 * assuming that acceptance test can run 1 hour but developers can push multiple times a day, how do
   you solve a problem of running these tests?
 
-  - Before I started implementing workaround(s) to handle that, I would try to find an actual
-    solution to the situation. According to Martin Fowler, entire pipeline should take no more than
-    10 minutes
+  - Before I start implementing workaround(s) to handle that, I would try to find an actual solution
+    to the situation. According to Martin Fowler, entire pipeline should take - ideally - no more
+    than 10 minutes
     ([KeepTheBuildFast](https://martinfowler.com/articles/continuousIntegration.html#KeepTheBuildFast)).
 
     - If there are in fact many acceptance tests instead of just one, then a key thing to
@@ -88,6 +96,9 @@ Things to consider are:
       where executing them every time developer commits something, is acceptable.
 
     - If there is actually one long test or test suite with at least one long test, than we could
-      try talking to developers to refactor that test, so it could be executed in shorter time.
+      try talking to developers to refactor that test, so it could be executed in acceptable time.
+
+  - However, if we really have to deal with at least one acceptance test running for 1 hour......
+    TODO
 
 * What is your zero down time deployment strategy?
