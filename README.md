@@ -32,7 +32,7 @@ Things to consider are:
   - Ask developers to remove unused packages from package.json
   - Ask developers to use smaller packages for the job with less dependencies
 
-* how would you notify the team if something went wrong?
+* **DONE** how would you notify the team if something went wrong?
 
   - Setup Default Notifications: https://app.circleci.com/settings/user/notifications
   - Project Notifications: https://app.circleci.com/settings/user/notifications
@@ -43,34 +43,51 @@ Things to consider are:
   - Setup third party CircleCI notification orbs, that can be explored here:
     https://circleci.com/orbs/registry/
 
-* how would you implement feature flags?
+* **DONE** how would you implement feature flags?
 
-  - I already know from Luke, that Optimizely is used in Cobiro. So, I created account there, added
-    TopMsgFeature feature and made use of it in the demo application. We can verify it during the
-    second meeting.
+  - I already know from Luke, that Optimizely is being used in Cobiro. So, I created account there,
+    added TopMsgFeature feature and made use of it in the demo application. It is now possible to
+    switch demo feature on and off in runtime.
 
 * how do feature flags affect testing?
 
 * what is your roll back strategy?
-  - The basic way is
 
-- The most straightforward approach with CircleCI would be to go to its UI, navigate to the pipeline
-  that deployed version you want to rollback to and click **Rerun -> Rerun Job with SSH**:
+  - AWS ECS already supports health checks
 
-  ![alt text](https://i.imgur.com/ZUlwojP.png 'Screenshot from CircieCI showing Rerun Job with SSH option')
+  - The most straightforward approach with CircleCI would be to go to its UI, navigate to the
+    pipeline that deployed version you want to rollback to and click **Rerun -> Rerun Job with
+    SSH**:
+
+    ![alt text](https://i.imgur.com/ZUlwojP.png 'Screenshot from CircieCI showing Rerun Job with SSH option')
 
   This way we can switch between any deployed versions of the application (assuming there are no
   other breaking things like database schema change).
 
-* please take advantage of smoke tests
+  - What can work in some simpler cases, is to turn breaking feature off in Optimizely.
+
+* **DONE** please take advantage of smoke tests
 
   - Added _Smoke tests after deploying to DEV_ job to _.circleci/config.yml_
 
-* please add a job for acceptance tests
+* **DONE** please add a job for acceptance tests
 
   - Added _User Acceptance Testing on QA_ job to _.circleci/config.yml_
 
 * assuming that acceptance test can run 1 hour but developers can push multiple times a day, how do
   you solve a problem of running these tests?
+
+  - Before I started implementing workaround(s) to handle that, I would try to find an actual
+    solution to the situation. According to Martin Fowler, entire pipeline should take no more than
+    10 minutes
+    ([KeepTheBuildFast](https://martinfowler.com/articles/continuousIntegration.html#KeepTheBuildFast)).
+
+    - If there are in fact many acceptance tests instead of just one, then a key thing to
+      investigate is, whether it is possible to split those acceptance tests and make use of
+      CircleCI's parallel execution. Ideally this would allow reducing tests run time to a point,
+      where executing them every time developer commits something, is acceptable.
+
+    - If there is actually one long test or test suite with at least one long test, than we could
+      try talking to developers to refactor that test, so it could be executed in shorter time.
 
 * What is your zero down time deployment strategy?
