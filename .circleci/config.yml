@@ -28,7 +28,7 @@ jobs:
   long-second-stage:
     docker:
       # TODO change to target image; this is just small thus fast for experimentation
-      - image: circleci/sshd
+      - image: circleci/node
     resource_class: small
     steps:
       - run:
