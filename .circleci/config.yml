@@ -32,10 +32,11 @@ jobs:
     steps:
       - run:
           command: |
-            curl -X GET https://circleci.com/api/v2/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME \
-              --header 'Content-Type: application/json' \
-              --header 'Accept: application/json' \
-              --header "Circle-Token: $CIRCLE_TOKEN"
+            curl --user ${CIRCLECI_TOKEN}: \
+              -X POST https://circleci.com/api/v2/workflow/{id}/rerun \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json'
+
 # Project slug: github/mariusz7/angular9-example-app
 # DZIAŁA1
 #              curl --user ${CIRCLECI_TOKEN}: \
@@ -141,6 +142,10 @@ jobs:
 workflows:
 
   "Automated acceptance tests (long running)":
+    filters:
+      branches:
+        only:
+          - master
     #triggers:
       #- schedule:
           # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
