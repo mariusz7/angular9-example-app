@@ -27,7 +27,8 @@ jobs:
 
   long-second-stage:
     docker:
-      - image: circleci/node:14.6.0-browsers
+      # TODO change to target image; this is just small thus fast for experimentation
+      - image: circleci/sshd
     resource_class: small
     steps:
       - run: echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
