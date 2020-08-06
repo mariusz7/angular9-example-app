@@ -121,7 +121,7 @@ jobs:
       - image: circleci/node:14.6.0-browsers
     resource_class: small
     steps:
-      - run: echo "Test"
+      - run: curl -X GET https://circleci.com/api/v2/context -H 'Accept: application/json' -H 'Circle-Token: CIRCLECI_TOKEN'
 
 
 workflows:
