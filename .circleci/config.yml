@@ -33,7 +33,7 @@ jobs:
       - run:
           command: |
             curl --user ${CIRCLECI_TOKEN}: \
-              -X POST https://circleci.com/api/v2/workflow/long-running-acceptance-tests/rerun \
+              -X POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun \
               -H 'Content-Type: application/json' \
               -H 'Accept: application/json'
 
