@@ -122,9 +122,14 @@ jobs:
     resource_class: small
     steps:
       - run:
-          command: |-
-            curl https://circleci.com/api/v2/me --header "Circle-Token: $CIRCLE_TOKEN"
-
+          command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+            if [[ true ]]; then
+              curl --user ${CIRCLECI_TOKEN}: \
+                --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                --data revision=$CIRCLE_SHA1 \
+                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
+            fi
 
 workflows:
 
