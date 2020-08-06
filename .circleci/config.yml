@@ -36,8 +36,12 @@ jobs:
             echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
       - run:
           command: |
-            curl \
-              --request POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun
+            curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              -H "Circle-Token: ${CIRCLECI_TOKEN}"
+              #curl \
+              #--request POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun
 
 #            curl --user ${CIRCLECI_TOKEN}: \
 #              -X POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun \
