@@ -116,7 +116,31 @@ jobs:
       - slack/notify-on-failure
 
 
+  long-second-stage:
+    docker:
+      - image: circleci/node:14.6.0-browsers
+    resource_class: small
+    steps:
+      - run: echo "Test"
+
+
 workflows:
+
+  "Automated acceptance tests (long running)":
+    triggers:
+      - schedule:
+          # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
+          # At minute 0 past hour 8, 10, 12, 14, 16, and 18 on Thursday.
+          cron: "0 8,10,12,14,16,18 * * 4"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - long-second-stage
+
+
+
 
     "Cobiro build check only":
       jobs:
@@ -132,22 +156,22 @@ workflows:
         - build:
             filters:
               branches:
-                only: master
+                only: masterDELETE_ME
 
         - run-test:
             filters:
               branches:
-                only: master
+                only: masterDELETE_ME
 
         - run-lint:
             filters:
               branches:
-                only: master
+                only: masterDELETE_ME
 
         - run-sonarqube:
             filters:
               branches:
-                only: master
+                only: masterDELETE_ME
 
 
 
