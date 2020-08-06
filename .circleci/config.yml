@@ -30,6 +30,7 @@ jobs:
       - image: circleci/node:14.6.0-browsers
     resource_class: small
     steps:
+      - run: echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
       - run:
           command: |
             curl --user ${CIRCLECI_TOKEN}: \
