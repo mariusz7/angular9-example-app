@@ -123,7 +123,7 @@ jobs:
     steps:
       - run:
           command: |-
-            curl -X GET "https://circleci.com/api/v2/context" -H "Accept: application/json" -H "Circle-Token: $CIRCLECI_TOKEN"
+            curl https://circleci.com/api/v2/me --header "Circle-Token: $CIRCLE_TOKEN"
 
 
 workflows:
