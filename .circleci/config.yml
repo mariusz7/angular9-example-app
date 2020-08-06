@@ -142,10 +142,6 @@ jobs:
 workflows:
 
   "Automated acceptance tests (long running)":
-    filters:
-      branches:
-        only:
-          - master
     #triggers:
       #- schedule:
           # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
@@ -157,6 +153,10 @@ workflows:
                 #- master
     jobs:
       - long-second-stage
+          filters:
+            branches:
+              only:
+                - master
 
 
 
