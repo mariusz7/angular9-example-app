@@ -31,7 +31,9 @@ jobs:
       - image: circleci/sshd
     resource_class: small
     steps:
-      - run: echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
+      - run:
+          command: |
+            echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
       - run:
           command: |
             curl \
