@@ -33,7 +33,7 @@ jobs:
       - run:
           command: |
             curl --user ${CIRCLECI_TOKEN}: \
-              -X POST https://circleci.com/api/v2/workflow/{id}/rerun \
+              -X POST https://circleci.com/api/v2/workflow/long-running-acceptance-tests/rerun \
               -H 'Content-Type: application/json' \
               -H 'Accept: application/json'
 
@@ -141,7 +141,7 @@ jobs:
 
 workflows:
 
-  "Automated acceptance tests (long running)":
+  long-running-acceptance-tests:
     #triggers:
       #- schedule:
           # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
