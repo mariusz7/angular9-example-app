@@ -152,7 +152,7 @@ workflows:
               #only:
                 #- master
     jobs:
-      - long-second-stage
+      - long-second-stage:
           filters:
             branches:
               only:
