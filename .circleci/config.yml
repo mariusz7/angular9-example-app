@@ -34,7 +34,7 @@ jobs:
       - run:
           command: |
             echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
-      - run: ssh-keyscan github.com ~/.ssh/known_hosts && git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
+      - run: ssh-keyscan github.com >> ~/.ssh/known_hosts && git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
       - run:
           command: |
             curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
