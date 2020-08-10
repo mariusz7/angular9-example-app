@@ -32,48 +32,22 @@ jobs:
       - image: circleci/node
     resource_class: small
     steps:
-      - run: |
-          curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
       - run: 
-          name: Check paraller run
+          name: Check long testing already in progress
           command: |
+            curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
             if [ "$(jq '.[].workflows | select(.workflow_name=="long-running-acceptance-tests") | .workflow_name' --exit-status running_static.json | wc -l)" -gt 1 ]; then
 
               echo "We don't want to run long lasting testing in parallel, so cancelling this run"
 
-              # Commit suicide
+              # Commit tactical suicide
               curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
               ~/circleci step halt
-
-              #echo "Wait for CircleCI to cancel this workflow"
-              #sleep 3
             fi
-      - run: echo "Next step"
-      #- run: |
-          #name: Run on fail status
-          #command: |
-          #  echo "I am result of above failed job"
-          #when: always
-#      - run: |
-#          curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
-#            -H 'Content-Type: application/json' \
-#            -H 'Accept: application/json' \
-#            -H "Circle-Token: ${CIRCLECI_TOKEN}"
-            #curl \
-            #--request POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun
-
-#            curl --user ${CIRCLECI_TOKEN}: \
-#              -X POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun \
-#              -H 'Content-Type: application/json' \
-#              -H 'Accept: application/json'
-
-# Project slug: github/mariusz7/angular9-example-app
-# DZIAŁA1
-#              curl --user ${CIRCLECI_TOKEN}: \
-#                --data build_parameters[CIRCLE_JOB]=deploy_docker \
-#                --data revision=$CIRCLE_SHA1 \
-#                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
-
+      - run: |
+          echo "Run long lasting tests [placeholder]"
+          sleep 60 # Simulate job taking some time
+          echo "Long lasting testing finished with success"
 
   build:
     docker:
