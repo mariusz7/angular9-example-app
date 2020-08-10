@@ -37,7 +37,6 @@ jobs:
           name: Run commands
           command: |
             echo "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
-            sleep 60
             curl -X POST "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
             sleep 60
             if jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
