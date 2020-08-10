@@ -7,6 +7,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@6.11.0
   aws-ecs: circleci/aws-ecs@1.2.0
   slack: circleci/slack@3.4.2
+  circleci-cli: circleci/circleci-cli@0.1.8
 
 commands:
   get-source-code:
@@ -31,16 +32,18 @@ jobs:
       - image: circleci/node
     resource_class: small
     steps:
-      - run: sleep 20
+      - run:
+          name: Install CircleCI CLI
+          command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash
       - run: |
           curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
       - run:
           name: Run commands
           command: |
-            sleep 60
+            #sleep 60
             echo "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
             curl -X POST "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
-            sleep 60
+            #sleep 60
             if false && jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
 
               echo "We don't want to run long lasting testing in parallel, so cancelling this run"
