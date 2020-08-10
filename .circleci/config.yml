@@ -172,9 +172,9 @@ workflows:
             branches:
               only:
                 - master
-     - print-something:
-        requires:
-          - long-second-stage
+      - print-something:
+          requires:
+            - long-second-stage
 
 
   "Cobiro build check only":
