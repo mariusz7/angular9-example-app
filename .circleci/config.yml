@@ -48,11 +48,11 @@ jobs:
               # Wait for CircleCI to cancel this workflow
               sleep 30
             fi
-      - run: |
-          name: Run on fail status
-          command: |
-            echo "I am result of above failed job"
-          when: always
+      #- run: |
+          #name: Run on fail status
+          #command: |
+          #  echo "I am result of above failed job"
+          #when: always
       - run: |
           curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
             -H 'Content-Type: application/json' \
