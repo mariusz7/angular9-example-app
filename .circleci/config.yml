@@ -69,7 +69,8 @@ jobs:
       - run: 
           name: Start long running second stage
           command: |
-            curl -X POST --fail --silent "https://circleci.com/api/v2/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLECI_TOKEN}"
+            #curl -X POST https://circleci.com/api/v2/project/github/mariusz7/angular9-example-app/pipeline?circle-token=${CIRCLECI_TOKEN}
+            curl --location --request POST 'https://circleci.com/api/v2/project/github/mariusz7/angular9-example-app/pipeline' --header "circle-token: ${CIRCLECI_TOKEN}"
 
 
   build:
