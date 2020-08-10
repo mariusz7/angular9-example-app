@@ -42,6 +42,9 @@ jobs:
 
               # Commit suicide
               curl -X POST --fail --silent "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
+              
+              # Wait for CircleCI to cancel this workflow
+              sleep 30
             fi
       - run: |
           name: Run on fail status
