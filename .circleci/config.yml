@@ -31,19 +31,17 @@ jobs:
       - image: circleci/node
     resource_class: small
     steps:
-      - run:
-          command: |
-            echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
+      - run: |
+          echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
       - run: echo << pipeline.id >> 
       - run: mkdir -p ~/.ssh && ssh-keyscan github.com > ~/.ssh/known_hosts && git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
-      - run:
-          command: |
-            curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
-              -H 'Content-Type: application/json' \
-              -H 'Accept: application/json' \
-              -H "Circle-Token: ${CIRCLECI_TOKEN}"
-              #curl \
-              #--request POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun
+      - run: |
+          curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            -H "Circle-Token: ${CIRCLECI_TOKEN}"
+            #curl \
+            #--request POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun
 
 #            curl --user ${CIRCLECI_TOKEN}: \
 #              -X POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun \
