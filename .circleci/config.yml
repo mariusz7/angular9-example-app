@@ -32,14 +32,10 @@ jobs:
       - image: circleci/node
     resource_class: small
     steps:
-      - run:
-          name: Install CircleCI CLI
-          command: 
-      - run: ~/circleci --help
       - run: |
           curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
-      - run:
-          name: Run commands
+      - run: 
+          name: Check paraller run
           command: |
             if false && jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
 
