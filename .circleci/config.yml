@@ -35,8 +35,9 @@ jobs:
           name: Check long testing already in progress
           command: |
             curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
-            echo "Found instances: $(jq '.[].workflows | select(.workflow_name=="long-running-acceptance-tests") | .workflow_name' --exit-status running.json | wc -l)"
-            if [ $(jq '.[].workflows | select(.workflow_name=="long-running-acceptance-tests") | .workflow_name' --exit-status running.json | wc -l) -gt 1 ]; then
+            INSTANCES_FOUND=$(jq '.[].workflows | select(.workflow_name=="long-running-acceptance-tests") | .workflow_name' --exit-status running.json | wc -l)
+            echo "Found instances: ${INSTANCES_FOUND}"
+            if [ ${INSTANCES_FOUND} -gt 1 ]; then
 
               echo "We don't want to run long lasting testing in parallel, so cancelling this run"
 
