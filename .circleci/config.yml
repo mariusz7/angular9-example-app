@@ -37,8 +37,10 @@ jobs:
       - run: mkdir -p ~/.ssh && ssh-keyscan github.com > ~/.ssh/known_hosts
       - run: git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
       #- run: sleep 60
-      #- run: |
-      #    curl --fail --silent https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running > running.json
+      - run: |
+          echo https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+      - run: |
+          curl --fail https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running > running.json
           #command: |-
             #export RUNNING_WORKFLOWS_URL="https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running"
       - run: cat ./running.json
