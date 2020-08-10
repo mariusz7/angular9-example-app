@@ -31,6 +31,7 @@ jobs:
       - image: circleci/node
     resource_class: small
     steps:
+      - run: sleep 20
       - run: |
           curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
       - run:
@@ -39,7 +40,7 @@ jobs:
             echo "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
             curl -X POST "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
             sleep 60
-            if jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
+            if false && jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
 
               echo "We don't want to run long lasting testing in parallel, so cancelling this run"
 
