@@ -60,14 +60,14 @@ jobs:
     steps:
       - run: echo "Second job in a workflow, e.g. deploy to a target env"
 
-  ping-long-second-stage:
+  start-long-second-stage:
     docker:
       # TODO change to target image; this is just small thus fast for experimentation
       - image: circleci/node
     resource_class: small
     steps:
       - run: 
-          name: Ping long running second stage
+          name: Start long running second stage
           command: |
             curl -X POST --fail --silent "https://circleci.com/api/v2/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLECI_TOKEN}"
 
@@ -170,20 +170,20 @@ workflows:
   version: 2
   
   ping-long-running-acceptance-tests:
-    triggers:
-      - schedule:
+    #triggers:
+#      - schedule:
           # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
           # At minute 0 past hour 8, 10, 12, 14, 16, and 18 on Thursday.
           # TODO 1: use today to avoid running every day and paying for it
           # Run every minute
-          cron: "* * * * *"
+          #cron: "* * * * *"
           #cron: "0 9,12,15,18 * * 1"
-          filters:
-            branches:
-              only:
-                - master
+#          filters:
+#            branches:
+#              only:
+#                - master
     jobs:
-      - ping-long-second-stage
+      - start-long-second-stage
 
   
   
