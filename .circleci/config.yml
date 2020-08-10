@@ -42,8 +42,9 @@ jobs:
               echo "We don't want to run long lasting testing in parallel, so cancelling this run"
 
               # Commit tactical suicide
-              curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
-              ~/circleci step halt
+              #curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
+              #~/circleci step halt
+              exit 1
             fi
       - run: |
           echo "Run long lasting tests [placeholder]"
