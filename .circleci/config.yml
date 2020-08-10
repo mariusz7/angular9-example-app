@@ -31,15 +31,15 @@ jobs:
       - image: circleci/node
     resource_class: small
     steps:
-      - run: |
-          echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
-      - run: echo << pipeline.id >> 
+      #- run: |
+      #    echo "Workflow ID: ${CIRCLE_WORKFLOW_ID}"
+      #- run: echo << pipeline.id >> 
       #- run: mkdir -p ~/.ssh && ssh-keyscan github.com > ~/.ssh/known_hosts
       #- run: git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
+      #- run: |
+      #    echo https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
       - run: |
-          echo https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
-      - run: |
-          curl --fail --silent https://circleci.com/api/v1.1/project/github/mariusz7/angular9-example-app
+          curl --fail --silent https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/mariusz7/angular9-example-app
       - run: |
           curl https://circleci.com/api/v1.1/project/github/mariusz7/angular9-example-app?circle-token=${CIRCLECI_TOKEN}&filter=running
 #curl https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running
