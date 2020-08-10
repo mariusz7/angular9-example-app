@@ -38,7 +38,8 @@ jobs:
       #- run: mkdir -p ~/.ssh && ssh-keyscan github.com > ~/.ssh/known_hosts &&
       - add_ssh_keys:
           fingerprints:
-            "ad:1c:08:a4:40:e3:6f:9c:f5:66:26:5d:4b:33:5d:8c"
+            - "16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48"
+            - "ad:1c:08:a4:40:e3:6f:9c:f5:66:26:5d:4b:33:5d:8c"
       - run: git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
       - run: |
           curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
