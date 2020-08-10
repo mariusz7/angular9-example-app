@@ -45,19 +45,20 @@ jobs:
               curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
               ~/circleci step halt
 
-              # Wait for CircleCI to cancel this workflow
+              echo "Wait for CircleCI to cancel this workflow"
               sleep 30
             fi
+      - run: echo "Next step"
       #- run: |
           #name: Run on fail status
           #command: |
           #  echo "I am result of above failed job"
           #when: always
-      - run: |
-          curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
-            -H 'Content-Type: application/json' \
-            -H 'Accept: application/json' \
-            -H "Circle-Token: ${CIRCLECI_TOKEN}"
+#      - run: |
+#          curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
+#            -H 'Content-Type: application/json' \
+#            -H 'Accept: application/json' \
+#            -H "Circle-Token: ${CIRCLECI_TOKEN}"
             #curl \
             #--request POST https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/rerun
 
