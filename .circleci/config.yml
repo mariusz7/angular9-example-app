@@ -38,11 +38,13 @@ jobs:
       #- run: git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
       - run: |
           curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
-      - run: |
-          if jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
-            echo "We don't want to run long lasting testing in parallel, so exiting"
-            exit 1
-          fi
+      - run:
+          name: Run commands
+          command: |
+            if jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
+              echo "We don't want to run long lasting testing in parallel, so exiting"
+              exit 1
+            fi
       - run: |
           echo "Skipping long running tests because they are already running"
           when: on_fail
