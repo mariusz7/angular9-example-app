@@ -37,12 +37,13 @@ jobs:
       - run: mkdir -p ~/.ssh && ssh-keyscan github.com > ~/.ssh/known_hosts
       - run: git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
       #- run: sleep 60
-      - run:
-          command: |-
+      - run: |
+          curl --fail --silent https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running > running.json
+          #command: |-
             #export RUNNING_WORKFLOWS_URL="https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running"
-            curl --fail --silent https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running > running.json
-            cat running.json
-            jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json
+      - run: cat running.json
+      - run: |
+          jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json
 
       - run: |
           curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
