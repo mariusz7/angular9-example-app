@@ -41,6 +41,7 @@ jobs:
           command: |-
             #export RUNNING_WORKFLOWS_URL="https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running"
             curl --fail --silent https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running > running.json
+            cat running.json
             jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json
 
       - run: |
