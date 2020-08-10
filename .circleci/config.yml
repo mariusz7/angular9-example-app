@@ -53,7 +53,7 @@ jobs:
 
           echo "Long lasting testing finished with success"
 
-  print-something:
+  deploy-to-dev:
     docker:
       - image: circleci/node
     resource_class: small
@@ -195,7 +195,7 @@ workflows:
             branches:
               only:
                 - master
-      - print-something:
+      - deploy-to-dev:
           requires:
             - long-second-stage
 
