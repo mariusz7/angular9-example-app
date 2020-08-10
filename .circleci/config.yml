@@ -35,8 +35,6 @@ jobs:
       - run:
           name: Install CircleCI CLI
           command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
-      - run: ls -la ~
-      - run: chmod +x ~/circleci
       - run: ~/circleci --help
       - run: |
           curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
@@ -45,7 +43,8 @@ jobs:
           command: |
             #sleep 60
             echo "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
-            curl -X POST "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
+            #curl -X POST "https://circleci.com/api/v2/workflow/${CIRCLE_WORKFLOW_ID}/cancel?circle-token=${CIRCLECI_TOKEN}"
+            ~/circleci step halt
             #sleep 60
             if false && jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
 
