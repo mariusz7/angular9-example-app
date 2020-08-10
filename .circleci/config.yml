@@ -69,7 +69,7 @@ jobs:
       - run: 
           name: Ping long running second stage
           command: |
-            curl --fail --silent "https://circleci.com/api/v2/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLECI_TOKEN}"
+            curl -X POST --fail --silent "https://circleci.com/api/v2/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline?circle-token=${CIRCLECI_TOKEN}"
 
 
   build:
