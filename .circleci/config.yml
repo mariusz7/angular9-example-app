@@ -39,14 +39,10 @@ jobs:
       - run: |
           curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
       - run: |
-          cat running.json
+          jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json && exit 1
       - run: |
-          jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json
-#curl https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running
-#command: |-
-#export RUNNING_WORKFLOWS_URL="https://circleci.com/api/v1.1/project/${VCS_TYPE}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running"
-      #- run: |
-      #    jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json
+          echo "Skipping long running tests because they are already running"
+          when: on_fail
 
       - run: |
           curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
