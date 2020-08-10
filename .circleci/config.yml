@@ -53,6 +53,13 @@ jobs:
 
           echo "Long lasting testing finished with success"
 
+  print-something:
+    docker:
+      - image: circleci/node
+    resource_class: small
+    steps:
+      - run: echo "Second job in a workflow, e.g. deploy to a target env"
+
   build:
     docker:
       - image: circleci/node:14.6.0-browsers
@@ -165,8 +172,9 @@ workflows:
             branches:
               only:
                 - master
-
-
+     - print-something:
+        requires:
+          - long-second-stage
 
 
   "Cobiro build check only":
