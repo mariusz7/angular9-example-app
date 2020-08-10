@@ -46,9 +46,10 @@ jobs:
               exit 1
             fi
       - run: |
-          echo "Skipping long running tests because they are already running"
+          name: Run on fail status
+          command: |
+              echo "I am result of above failed job"
           when: on_fail
-
       - run: |
           curl -X POST https://circleci.com/api/v2/workflow/710c52d3-fc49-44ca-a403-029a47a25dd4/rerun \
             -H 'Content-Type: application/json' \
