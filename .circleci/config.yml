@@ -39,7 +39,12 @@ jobs:
             echo "Found instances: ${INSTANCES_FOUND}"
             if [ ${INSTANCES_FOUND} -gt 1 ]; then
 
-              echo "We don't want to run long lasting testing in parallel, so cancelling this run"
+               #@echo "$(ccso)$(ccgreen)Finished unit tests of console app$(ccend)"
+              ccend = $(shell tput sgr0)
+              ccbold = $(shell tput bold)
+              ccgreen = $(shell tput setaf 2)
+              ccso = $(shell tput smso)
+              echo "$(ccso)$(ccgreen)We don't want to run long lasting testing in parallel, so cancelling this run$(ccend)"
 
               # Commit tactical suicide
               curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
