@@ -37,7 +37,7 @@ jobs:
       - run: 
           name: Check paraller run
           command: |
-            if false && jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
+            if jq '.[] | select(.workflows.workflow_name=="long-running-acceptance-tests")' --exit-status running.json; then
 
               echo "We don't want to run long lasting testing in parallel, so cancelling this run"
 
