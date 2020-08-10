@@ -45,8 +45,8 @@ jobs:
               curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
               ~/circleci step halt
 
-              echo "Wait for CircleCI to cancel this workflow"
-              sleep 30
+              #echo "Wait for CircleCI to cancel this workflow"
+              #sleep 3
             fi
       - run: echo "Next step"
       #- run: |
