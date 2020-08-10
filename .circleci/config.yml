@@ -39,12 +39,7 @@ jobs:
             echo "Found instances: ${INSTANCES_FOUND}"
             if [ ${INSTANCES_FOUND} -gt 1 ]; then
 
-               #@echo "$(ccso)$(ccgreen)Finished unit tests of console app$(ccend)"
-              ccend = $(tput sgr0)
-              ccbold = $(tput bold)
-              ccgreen = $(tput setaf 2)
-              ccso = $(tput smso)
-              echo "$(ccso)$(ccgreen)We don't want to run long lasting testing in parallel, so cancelling this run$(ccend)"
+              echo "We don't want to run long lasting testing in parallel, so cancelling this run"
 
               # Commit tactical suicide
               curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
@@ -162,15 +157,16 @@ jobs:
 workflows:
   version: 2
   long-running-acceptance-tests:
-    #triggers:
-      #- schedule:
+    triggers:
+      - schedule:
           # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
           # At minute 0 past hour 8, 10, 12, 14, 16, and 18 on Thursday.
-          #cron: "0 8,10,12,14,16,18 * * 4"
-          #filters:
-            #branches:
-              #only:
-                #- master
+          # TODO 1: use today to avoid running every day and paying for it
+          cron: "0 9,12,15,18 * * 1"
+          filters:
+            branches:
+              only:
+                - master
     jobs:
       - long-second-stage:
           filters:
