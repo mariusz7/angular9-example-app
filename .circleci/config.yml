@@ -39,6 +39,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "06:cd:62:0c:b2:6b:d8:4d:00:a9:ab:7d:94:92:76:e0"
+            - "8b:b6:49:0a:8b:17:9e:6e:7c:54:97:cf:01:c3:09:be"
             - "16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48"
             - "ad:1c:08:a4:40:e3:6f:9c:f5:66:26:5d:4b:33:5d:8c"
       - run: git ls-remote "${CIRCLE_REPOSITORY_URL}" HEAD
