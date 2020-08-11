@@ -42,6 +42,7 @@ Things to consider are:
   - Setup IRC notifications: https://circleci.com/docs/2.0/notifications/#using-the-irc-orb
   - Setup third party CircleCI notification orbs, that can be explored here:
     https://circleci.com/orbs/registry/
+  - We can use 'when: on_fail' to add some custom action
 
 * **DONE** how would you implement feature flags?
 
