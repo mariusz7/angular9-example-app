@@ -1,6 +1,6 @@
 version: 2.1
 
-
+ 
 orbs:
   node: circleci/node@1.1.6
   browser-tools: circleci/browser-tools@1.0.1
@@ -25,11 +25,61 @@ commands:
 
 jobs:
 
+  long-second-stage:
+    docker:
+      # TODO change to target image; this is just small thus fast for experimentation
+      - image: circleci/node
+    resource_class: small
+    steps:
+      - run: 
+          name: Check long testing already in progress
+          command: |
+            curl --fail --silent "https://circleci.com/api/v1.1/project/<< pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}?circle-token=${CIRCLECI_TOKEN}&filter=running" > running.json
+            INSTANCES_FOUND=$(jq '.[].workflows | select(.workflow_name=="long-running-acceptance-tests") | .workflow_name' --exit-status running.json | wc -l)
+            echo "Found instances: ${INSTANCES_FOUND}"
+            if [ ${INSTANCES_FOUND} -gt 1 ]; then
+
+              echo "We don't want to run long lasting testing in parallel, so cancelling this run"
+
+              # Commit tactical suicide
+              #curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~ bash
+              #~/circleci step halt
+              exit 1
+            fi
+      - run: |
+          echo "Run long lasting tests [placeholder]"
+
+          # Simulate job taking some time
+          sleep 120
+
+          echo "Long lasting testing finished with success"
+
+  deploy-to-dev:
+    docker:
+      - image: circleci/node
+    resource_class: small
+    steps:
+      - run: echo "Second job in a workflow, e.g. deploy to a target env"
+
+  start-long-second-stage:
+    docker:
+      # TODO change to target image; this is just small thus fast for experimentation
+      - image: circleci/node
+    resource_class: small
+    steps:
+      - run: 
+          name: Start long running second stage
+          command: |
+            #curl -X POST https://circleci.com/api/v2/project/github/mariusz7/angular9-example-app/pipeline?circle-token=${CIRCLECI_TOKEN}
+            curl --location --request POST https://circleci.com/api/v2/project/github/mariusz7/angular9-example-app/pipeline --header "circle-token: ${CIRCLECI_TOKEN}"
+
+
   build:
     docker:
       - image: circleci/node:14.6.0-browsers
     # Switch from default medium machine (vCPUs: 2, RAM: 4GB) to large machine (vCPUs: 4, RAM: 8GB):
-    resource_class: large
+    # resource_class: large
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -40,11 +90,14 @@ jobs:
                 root: .
                 paths:
                   - dist
+      - store_artifacts:
+          path: ./dist/browser
       - slack/notify-on-failure
 
   run-test:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     # Depending on the number of tests, we can increase number of parallel runs:
     parallelism: 2
     steps:
@@ -59,6 +112,7 @@ jobs:
   run-lint:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -70,6 +124,7 @@ jobs:
   run-sonarqube:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -81,6 +136,7 @@ jobs:
   run-smoke-tests:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - run: echo "Running smoke tests [placeholder]"
       - slack/notify-on-failure
@@ -88,6 +144,7 @@ jobs:
   run-uat:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - run: echo "Running User Acceptance Tests [placeholder]"
       - slack/notify-on-failure
@@ -96,6 +153,7 @@ jobs:
   build-and-test-just-check:
     docker:
       - image: circleci/node:14.6.0-browsers
+    resource_class: small
     steps:
       - get-source-code
       - node/with-cache:
@@ -107,132 +165,166 @@ jobs:
       - slack/notify-on-failure
 
 
+
+
+
 workflows:
+  version: 2
+  
+#  ping-long-running-acceptance-tests:
+    #triggers:
+#      - schedule:
+          # To avoid eating all credits set current day number (1: Monday, 4: Thursday, etc.)
+          # At minute 0 past hour 8, 10, 12, 14, 16, and 18 on Thursday.
+          # TODO 1: use today to avoid running every day and paying for it
+          # Run every minute
+          #cron: "* * * * *"
+          #cron: "0 9,12,15,18 * * 1"
+#          filters:
+#            branches:
+#              only:
+#                - master
+#    jobs:
+#      - start-long-second-stage
 
-    "Cobiro build check only":
-      jobs:
-        - build-and-test-just-check:
-            name: "Build app. and run tests for side branches"
-            filters:
-              branches:
-                ignore: master
-
-
-    "Cobiro regular pipeline":
-      jobs:
-        - build:
-            filters:
-              branches:
-                only: master
-
-        - run-test:
-            filters:
-              branches:
-                only: master
-
-        - run-lint:
-            filters:
-              branches:
-                only: master
-
-        - run-sonarqube:
-            filters:
-              branches:
-                only: master
-
+  
+  
+  long-running-acceptance-tests:
+    jobs:
+      - long-second-stage:
+          filters:
+            branches:
+              only:
+                - master
+      - deploy-to-dev:
+          requires:
+            - long-second-stage
 
 
-        - aws-ecr/build-and-push-image:
-            name: "Dockerize app. and push to repository"
-            account-url: AWS_ECR_ACCOUNT_URL
-            aws-access-key-id: AWS_ACCESS_KEY_ID
-            aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-            create-repo: true
-            attach-workspace: true
-            dockerfile: Dockerfile
-            no-output-timeout: 5m
-            path: .
-            region: AWS_REGION
-            repo: angular9-example-app
-            skip-when-tags-exist: false
-            tag: "latest,${CIRCLE_SHA1}"
-            requires:
-              - build
-              - run-test
-              - run-lint
-              - run-sonarqube
-            filters:
-              branches:
-                only: master
-
-        - aws-ecs/deploy-service-update:
-            name: "Deploy to DEV"
-            requires:
-              - "Dockerize app. and push to repository"
-            family: 'cobiro-dev-task-definition'
-            cluster-name: 'cobiro-dev-cluster'
-            service-name: 'cobiro-dev-service'
-            container-image-name-updates: "container=cobiro-dev-container,tag=${CIRCLE_SHA1}"
-            filters:
-              branches:
-                only: master
-
-        - run-smoke-tests:
-            name: "Smoke tests after deploying to DEV"
-            requires:
-              - "Deploy to DEV"
-            filters:
-              branches:
-                only: master
+  "Cobiro build check only":
+    jobs:
+      - build-and-test-just-check:
+          name: "Build app. and run tests for side branches"
+          filters:
+            branches:
+              ignore: master
 
 
-        - deploy-to-qa-approval:
-            name: "Approval before deployment to QA"
-            type: approval
-            requires:
-              - "Smoke tests after deploying to DEV"
-            filters:
-              branches:
-                only: master
+  "Cobiro regular pipeline":
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: masterDELETE_ME
 
-        - aws-ecs/deploy-service-update:
-            name: "Deploy to QA"
-            requires:
-              - "Approval before deployment to QA"
-            family: 'cobiro-qa-task-definition'
-            cluster-name: 'cobiro-qa-cluster'
-            service-name: 'cobiro-qa-service'
-            container-image-name-updates: "container=cobiro-qa-container,tag=${CIRCLE_SHA1}"
-            filters:
-              branches:
-                only: master
+      - run-test:
+          filters:
+            branches:
+              only: masterDELETE_ME
 
-        - run-uat:
-            name: "User Acceptance Testing on QA"
-            requires:
-              - "Deploy to QA"
-            filters:
-              branches:
-                only: master
+      - run-lint:
+          filters:
+            branches:
+              only: masterDELETE_ME
+
+      - run-sonarqube:
+          filters:
+            branches:
+              only: masterDELETE_ME
 
 
-        - deploy-to-prod-approval:
-            name: "Approval before deployment to PROD"
-            type: approval
-            requires:
-              - "User Acceptance Testing on QA"
-            filters:
-              branches:
-                only: master
 
-        - aws-ecs/deploy-service-update:
-            name: "Deploy to PROD"
-            requires:
-              - "Approval before deployment to PROD"
-            family: 'cobiro-prod-task-definition'
-            cluster-name: 'cobiro-prod-cluster'
-            service-name: 'cobiro-prod-service'
-            container-image-name-updates: "container=cobiro-prod-container,tag=${CIRCLE_SHA1}"
-            filters:
-              branches:
-                only: master
+      - aws-ecr/build-and-push-image:
+          name: "Dockerize app. and push to repository"
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: true
+          attach-workspace: true
+          dockerfile: Dockerfile
+          no-output-timeout: 5m
+          path: .
+          region: AWS_REGION
+          repo: angular9-example-app
+          skip-when-tags-exist: false
+          tag: "latest,${CIRCLE_SHA1}"
+          requires:
+            - build
+            - run-test
+            - run-lint
+            - run-sonarqube
+          filters:
+            branches:
+              only: master
+
+      - aws-ecs/deploy-service-update:
+          name: "Deploy to DEV"
+          requires:
+            - "Dockerize app. and push to repository"
+          family: 'cobiro-dev-task-definition'
+          cluster-name: 'cobiro-dev-cluster'
+          service-name: 'cobiro-dev-service'
+          container-image-name-updates: "container=cobiro-dev-container,tag=${CIRCLE_SHA1}"
+          filters:
+            branches:
+              only: master
+
+      - run-smoke-tests:
+          name: "Smoke tests after deploying to DEV"
+          requires:
+            - "Deploy to DEV"
+          filters:
+            branches:
+              only: master
+
+
+      - deploy-to-qa-approval:
+          name: "Approval before deployment to QA"
+          type: approval
+          requires:
+            - "Smoke tests after deploying to DEV"
+          filters:
+            branches:
+              only: master
+
+      - aws-ecs/deploy-service-update:
+          name: "Deploy to QA"
+          requires:
+            - "Approval before deployment to QA"
+          family: 'cobiro-qa-task-definition'
+          cluster-name: 'cobiro-qa-cluster'
+          service-name: 'cobiro-qa-service'
+          container-image-name-updates: "container=cobiro-qa-container,tag=${CIRCLE_SHA1}"
+          filters:
+            branches:
+              only: master
+
+      - run-uat:
+          name: "User Acceptance Testing on QA"
+          requires:
+            - "Deploy to QA"
+          filters:
+            branches:
+              only: master
+
+
+      - deploy-to-prod-approval:
+          name: "Approval before deployment to PROD"
+          type: approval
+          requires:
+            - "User Acceptance Testing on QA"
+          filters:
+            branches:
+              only: master
+
+      - aws-ecs/deploy-service-update:
+          name: "Deploy to PROD"
+          requires:
+            - "Approval before deployment to PROD"
+          family: 'cobiro-prod-task-definition'
+          cluster-name: 'cobiro-prod-cluster'
+          service-name: 'cobiro-prod-service'
+          container-image-name-updates: "container=cobiro-prod-container,tag=${CIRCLE_SHA1}"
+          filters:
+            branches:
+              only: master
